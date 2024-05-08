@@ -1,1 +1,1 @@
-print("tenho fé")
+print("tenho f")
