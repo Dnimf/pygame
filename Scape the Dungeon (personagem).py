@@ -5,57 +5,114 @@ pygame.init()
 pygame.mixer.init()
 
 # Create window
-WIDTH = 1000
-HEIGHT = 700
+# WIDTH = 1000
+# HEIGHT = 700
+infoObject = pygame.display.Info()
+WIDTH = infoObject.current_w
+HEIGHT = infoObject.current_h
 window = pygame.display.set_mode((WIDTH, HEIGHT))
+
 pygame.display.set_caption("Game")
 assets = {}
-assets['player_img_up'] = pygame.image.load('link_traz.png').convert_alpha()
-assets['player_img_down'] = pygame.image.load('link_frente.png').convert_alpha()
-assets['player_img_left'] = pygame.image.load('link_esquerda.png').convert_alpha()
-assets['player_img_right'] = pygame.image.load('link_direita.png').convert_alpha()
-assets['player_img_up'] = pygame.transform.scale(assets['player_img_up'], (72, 101))
-assets['player_img_down'] = pygame.transform.scale(assets['player_img_down'], (72, 101))
-assets['player_img_left'] = pygame.transform.scale(assets['player_img_left'], (72, 101))
-assets['player_img_right'] = pygame.transform.scale(assets['player_img_right'], (72, 101))
+
 assets['flecha_img'] = pygame.image.load('Flecha.png').convert_alpha()
 assets['flecha_img'] = pygame.transform.scale(assets['flecha_img'], (49, 13))
+
+#Criando as animações - Sprites de zelda
+# Movendo pra frente
+anim_frente = []
+for i in range(1,5):
+    file = f'Frente/link_frente{i}.png'
+    img = pygame.image.load(file).convert()
+    img = pygame.transform.scale(img,(72,101))
+    anim_frente.append(img)
+assets['anim_frente'] = anim_frente
+
+# Movendo pra traz
+anim_traz = []
+for i in range(1,5):
+    file = f'Traz/link_traz{i}.png'
+    img = pygame.image.load(file).convert()
+    img = pygame.transform.scale(img,(72,101))
+    anim_traz.append(img)
+assets['anim_traz'] = anim_traz
+
+# Movendo pra esquerda
+anim_esquerda = []
+for i in range(1,5):
+    file = f'Esquerda/link_esquerda{i}.png'
+    img = pygame.image.load(file).convert()
+    img = pygame.transform.scale(img,(72,101))
+    anim_esquerda.append(img)
+assets['anim_esquerda'] = anim_esquerda
+
+# Movendo pra direita
+anim_direita = []
+for i in range(1,5):
+    file = f'Direita/link_direita{i}.png'
+    img = pygame.image.load(file).convert()
+    img = pygame.transform.scale(img,(72,101))
+    anim_direita.append(img)
+assets['anim_direita'] = anim_direita
 
 #Criando a classe do player
 class link(pygame.sprite.Sprite):
     def __init__(self, groups, assets):
-        # Construtor da classe mãe (Sprite).
+        # caracteristicas do player.
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = assets['player_img_down']
+        self.groups = groups
+        self.assets = assets
+        self.img_frente = assets['anim_frente']
+        self.img_traz = assets['anim_traz']
+        self.img_esquerda = assets['anim_esquerda']
+        self.img_direita = assets['anim_direita']
+        self.image = self.img_frente[0]
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
         self.speedy = 0
-        self.groups = groups
-        self.assets = assets
         self.last_shot = pygame.time.get_ticks()
-        self.shoot_ticks = 500
+        self.shoot_ticks = 700
         self.direction = 'down'
-
+        self.frame = 0
+        self.velocidade_anim = 0.1
 
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-        # Update player image based on direction
-        if self.speedx < 0:
-            self.image = self.assets['player_img_left']
-            self.direction = 'left'
-        elif self.speedx > 0:
-            self.image = self.assets['player_img_right']
-            self.direction = 'right'
-        elif self.speedy < 0:
-            self.image = self.assets['player_img_up']
-            self.direction = 'up'
-        elif self.speedy > 0:
-            self.image = self.assets['player_img_down']
-            self.direction = 'down'
+
+        # Muda a direção do jogador baseado na direção
+        # Define que se o jogador estiver parado, a sprite sera a inicial
+        if self.speedx == 0 and self.speedy == 0:
+            if self.direction == 'left':
+                self.image = self.img_esquerda[0]
+            elif self.direction == 'right':
+                self.image = self.img_direita[0]
+            elif self.direction == 'up':
+                self.image = self.img_traz[0]
+            elif self.direction == 'down':
+                self.image = self.img_frente[0]
+
+        # Define que se o jogador estiver se movimentando o sprite sera animado
+        else:
+            if self.speedx < 0:
+                self.image = self.img_esquerda[int(self.frame)]
+                self.direction = 'left'
+            elif self.speedx > 0:
+                self.image = self.img_direita[int(self.frame)]
+                self.direction = 'right'
+            elif self.speedy < 0:
+                self.image = self.img_traz[int(self.frame)]
+                self.direction = 'up'
+            elif self.speedy > 0:
+                self.image = self.img_frente[int(self.frame)]
+                self.direction = 'down'
+        
+        self.frame += self.velocidade_anim
+        if self.frame >= len(self.img_frente):
+            self.frame = 0
 
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
@@ -152,16 +209,16 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                player.speedx = -5
+                player.speedx = -3
                 player.speedy = 0
             elif event.key == pygame.K_d:
-                player.speedx = 5
+                player.speedx = 3
                 player.speedy = 0
             elif event.key == pygame.K_w:
-                player.speedy = -5
+                player.speedy = -3
                 player.speedx = 0
             elif event.key == pygame.K_s:
-                player.speedy = 5
+                player.speedy = 3
                 player.speedx = 0
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.shoot()
