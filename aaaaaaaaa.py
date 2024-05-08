@@ -24,21 +24,23 @@ class inimigo(pygame.sprite.Sprite):
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH / 2
-        self.rect.y = HEIGHT - 10
-        self.speedx=0
-
-        while self.rect.x - 80>WIDTH/4:
-            self.speedx = -1
-        #self.speedy = 
+        self.rect.y = HEIGHT - 20
+        self.speedx=-1
+        self.speedy = -1
     def update(self):
         # Atualização da posição da nave
-        self.rect.x += self.speedx
+        # self.rect.x += self.speedx
 
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
+    # def distancia(self):
+        if self.rect.x>WIDTH/8:
+            self.rect.x += self.speedx
+        if self.rect.y>HEIGHT-120:
+            self.rect.y +=self.speedy
 game=True
 all_sprites=pygame.sprite.Group()
 slime=inimigo(meteor_img)
