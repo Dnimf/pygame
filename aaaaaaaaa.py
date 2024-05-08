@@ -16,16 +16,20 @@ SHIP_WIDTH = 50
 SHIP_HEIGHT = 38
 font = pygame.font.SysFont(None, 48)
 background = pygame.image.load(r'C:\Users\Daniel\referencia\assets\img\starfield.png').convert()
-meteor_img = pygame.image.load(r'').convert_alpha()
-meteor_img = pygame.transform.scale(meteor_img, (METEOR_WIDTH, METEOR_HEIGHT))
+slime = pygame.image.load(r'C:\Users\Daniel\OneDrive\Documentos\pygame\pixil-frame-0.png').convert_alpha()
+meteor_img = pygame.transform.scale(slime, (METEOR_WIDTH, METEOR_HEIGHT))
 class inimigo(pygame.sprite.Sprite):
     def __init__(self, img):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = WIDTH / 2
-        self.rect.bottom = HEIGHT - 10
-        self.speedx = 5
+        self.rect.x = WIDTH / 2
+        self.rect.y = HEIGHT - 10
+        self.speedx=0
+
+        while self.rect.x - 80>WIDTH/4:
+            self.speedx = -1
+        #self.speedy = 
     def update(self):
         # Atualização da posição da nave
         self.rect.x += self.speedx
@@ -35,10 +39,11 @@ class inimigo(pygame.sprite.Sprite):
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
+game=True
 all_sprites=pygame.sprite.Group()
 slime=inimigo(meteor_img)
 all_sprites.add(slime)
-game=True
+
 clock = pygame.time.Clock()
 FPS = 30
 while game:
@@ -59,7 +64,7 @@ while game:
     # Desenhando meteoros
     all_sprites.draw(window)
 
-pygame.display.update()  # Mostra o novo frame para o jogador
+    pygame.display.update()  # Mostra o novo frame para o jogador
 
 # ===== Finalização =====
 pygame.quit() 
