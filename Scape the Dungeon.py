@@ -76,7 +76,8 @@ class link(pygame.sprite.Sprite):
         if elapsed_ticks > self.shoot_ticks:
             # Marca o tick da nova imagem.
             self.last_shot = now
-            # A nova bala vai ser criada no centro horizontal do personagem
+            # A nova flecha vai ser criada no centro horizontal do personagem
+            # Linha 81 a 88: fonte - GPT
             if self.direction == 'left':
                 new_flecha = flecha(self.assets, self.rect.centery, self.rect.left, self.direction)
             elif self.direction == 'right':
@@ -151,25 +152,30 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                player.speedx -= 5
-            if event.key == pygame.K_d:
-                player.speedx += 5
-            if event.key == pygame.K_w:
-                player.speedy -= 5
-            if event.key == pygame.K_s:
-                player.speedy += 5
+                player.speedx = -5
+                player.speedy = 0
+            elif event.key == pygame.K_d:
+                player.speedx = 5
+                player.speedy = 0
+            elif event.key == pygame.K_w:
+                player.speedy = -5
+                player.speedx = 0
+            elif event.key == pygame.K_s:
+                player.speedy = 5
+                player.speedx = 0
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.shoot()
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                player.speedx += 5
-            if event.key == pygame.K_d:
-                player.speedx -= 5
-            if event.key == pygame.K_w:
-                player.speedy += 5
-            if event.key == pygame.K_s:
-                player.speedy -= 5
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_a and player.speedx < 0:
+            player.speedx = 0
+        elif event.key == pygame.K_d and player.speedx > 0:
+            player.speedx = 0
+        elif event.key == pygame.K_w and player.speedy < 0:
+            player.speedy = 0
+        elif event.key == pygame.K_s and player.speedy > 0:
+            player.speedy = 0
+
 
     
     all_sprites.update()
