@@ -1,0 +1,1 @@
+print("Deus me ajuda!")
