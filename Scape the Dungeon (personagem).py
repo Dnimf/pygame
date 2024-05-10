@@ -4,9 +4,7 @@ import pygame.sprite
 pygame.init()
 pygame.mixer.init()
 
-# Create window
-# WIDTH = 1000
-# HEIGHT = 700
+
 infoObject = pygame.display.Info()
 WIDTH = infoObject.current_w
 HEIGHT = infoObject.current_h
@@ -15,8 +13,27 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Game")
 assets = {}
 
-assets['flecha_img'] = pygame.image.load('Flecha.png').convert_alpha()
-assets['flecha_img'] = pygame.transform.scale(assets['flecha_img'], (49, 13))
+#Criando o background
+assets['background'] = pygame.image.load('background.png').convert()
+assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
+
+#criando a flecha
+assets['flecha_img'] = pygame.image.load('flecha.png').convert_alpha()
+assets['flecha_img'] = pygame.transform.scale(assets['flecha_img'], (55, 19))
+
+#Criando os srpites de tiro
+assets['tiro_frente'] = pygame.image.load('Link_atirando_frente.png').convert_alpha()
+assets['tiro_frente'] = pygame.transform.scale(assets['tiro_frente'], (72, 101))
+
+assets['tiro_direita'] = pygame.image.load('Link_atirando_lado.png').convert_alpha()
+assets['tiro_direita'] = pygame.transform.scale(assets['tiro_direita'], (72, 101))
+
+assets['tiro_esquerda'] = pygame.transform.flip(assets['tiro_direita'], True, False)
+
+assets['tiro_traz'] = pygame.image.load('Link_atirando_traz.png').convert_alpha()
+assets['tiro_traz'] = pygame.transform.scale(assets['tiro_traz'], (72, 101))
+
+
 
 #Criando as animações - Sprites de zelda
 # Movendo pra frente
@@ -67,10 +84,14 @@ class link(pygame.sprite.Sprite):
         self.img_traz = assets['anim_traz']
         self.img_esquerda = assets['anim_esquerda']
         self.img_direita = assets['anim_direita']
-        self.image = self.img_frente[0]
+        self.tiro_frente = assets['tiro_frente']
+        self.tiro_traz = assets['tiro_traz']
+        self.tiro_esquerda = assets['tiro_esquerda']
+        self.tiro_direita = assets['tiro_direita']
+        self.image = self.img_traz[0]
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
-        self.rect.bottom = HEIGHT - 10
+        self.rect.bottom = HEIGHT - 120
         self.speedx = 0
         self.speedy = 0
         self.last_shot = pygame.time.get_ticks()
@@ -78,6 +99,7 @@ class link(pygame.sprite.Sprite):
         self.direction = 'down'
         self.frame = 0
         self.velocidade_anim = 0.1
+        self.frame_tiro = pygame.time.get_ticks()
 
     def update(self):
         self.rect.x += self.speedx
@@ -114,20 +136,21 @@ class link(pygame.sprite.Sprite):
         if self.frame >= len(self.img_frente):
             self.frame = 0
 
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
+        if self.rect.right > WIDTH-150:
+            self.rect.right = WIDTH-150
+        if self.rect.left < 150:
+            self.rect.left = 150
+        if self.rect.top < 85:
+            self.rect.top = 85
+        if self.rect.bottom > HEIGHT-115:
+            self.rect.bottom = HEIGHT-115
 
     def shoot(self):
         # Verifica se pode atirar
         now = pygame.time.get_ticks()
         # Verifica quantos ticks se passaram desde o último tiro.
         elapsed_ticks = now - self.last_shot
+        tick_tiro = now - self.frame_tiro
 
         # Se já pode atirar novamente...
         if elapsed_ticks > self.shoot_ticks:
@@ -137,14 +160,20 @@ class link(pygame.sprite.Sprite):
             # Linha 81 a 88: fonte - GPT
             if self.direction == 'left':
                 new_flecha = flecha(self.assets, self.rect.centery, self.rect.left, self.direction)
+                self.img_tiro = self.tiro_esquerda
             elif self.direction == 'right':
                 new_flecha = flecha(self.assets, self.rect.centery, self.rect.right, self.direction)
+                self.img_tiro = self.tiro_direita
             elif self.direction == 'up':
                 new_flecha = flecha(self.assets, self.rect.top, self.rect.centerx, self.direction)
+                self.img_tiro = self.tiro_traz
             elif self.direction == 'down':
                 new_flecha = flecha(self.assets, self.rect.bottom, self.rect.centerx, self.direction)
+                self.img_tiro = self.tiro_frente
             self.groups['all_sprites'].add(new_flecha)
             self.groups['all_flechas'].add(new_flecha)
+            if tick_tiro > 60:
+                self.image = self.img_tiro
 
 
 # Criando a classe das flechas
@@ -172,15 +201,15 @@ class flecha(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
         if self.direction == 'left':
-            self.image = assets['flecha_img']
-        elif self.direction == 'right':
             self.image = pygame.transform.rotate(assets['flecha_img'], 180)
+        elif self.direction == 'right':
+            self.image = assets['flecha_img']
         elif self.direction == 'up':
-            self.image = pygame.transform.rotate(assets['flecha_img'], 270)
-        elif self.direction == 'down':
             self.image = pygame.transform.rotate(assets['flecha_img'], 90)
+        elif self.direction == 'down':
+            self.image = pygame.transform.rotate(assets['flecha_img'], 270)
 
-        if self.rect.bottom < 0 or self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
+        if self.rect.bottom < 85 or self.rect.top > HEIGHT-115 or self.rect.right < 150 or self.rect.left > WIDTH-150:
             self.kill()
 
 # Criando um grupo de flechas
@@ -202,6 +231,7 @@ while running:
     clock.tick(FPS)
 
     window.fill((0, 0, 0))
+    window.blit(assets['background'], (0, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -224,13 +254,13 @@ while running:
             player.shoot()
 
     if event.type == pygame.KEYUP:
-        if event.key == pygame.K_a and player.speedx < 0:
+        if event.key == pygame.K_a:
             player.speedx = 0
-        elif event.key == pygame.K_d and player.speedx > 0:
+        elif event.key == pygame.K_d:
             player.speedx = 0
-        elif event.key == pygame.K_w and player.speedy < 0:
+        elif event.key == pygame.K_w:
             player.speedy = 0
-        elif event.key == pygame.K_s and player.speedy > 0:
+        elif event.key == pygame.K_s:
             player.speedy = 0
 
 
