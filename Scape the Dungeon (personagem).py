@@ -1,6 +1,6 @@
 import pygame
 import pygame.sprite
-
+import random
 pygame.init()
 pygame.mixer.init()
 
@@ -8,6 +8,8 @@ pygame.mixer.init()
 infoObject = pygame.display.Info()
 WIDTH = infoObject.current_w
 HEIGHT = infoObject.current_h
+SLIME_WIDTH = 50
+SLIME_HEIGHT = 38
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption("Game")
@@ -34,7 +36,9 @@ assets['tiro_esquerda'] = pygame.transform.flip(assets['tiro_direita'], True, Fa
 assets['tiro_traz'] = pygame.image.load('Link_atirando_traz.png').convert_alpha()
 assets['tiro_traz'] = pygame.transform.scale(assets['tiro_traz'], (72, 101))
 
-
+#criação do inimigo
+assets['slime'] = pygame.image.load(r'C:\Users\Daniel\OneDrive\Documentos\pygame\pixil-frame-0.png').convert_alpha()
+assets['slime_img'] = pygame.transform.scale(assets['slime'], (SLIME_WIDTH, SLIME_HEIGHT))
 
 # Criando as animações - Sprites do jogo the legend of zelda: minish cap
 # Movendo para frente
@@ -302,6 +306,33 @@ class flecha(pygame.sprite.Sprite):
         if self.rect.bottom < 85 or self.rect.top > HEIGHT-115 or self.rect.right < 150 or self.rect.left > WIDTH-150:
             self.kill()
 
+#criando classe das slimes
+#class inimigo(pygame.sprite.Sprite):
+class inimigo(pygame.sprite.Sprite):
+    def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x =random.randint(0, WIDHT-SLIME-WITDH)
+        self.rect.y = random.radint(0, HEIGHT-SLIME_HEIGHT)
+        self.speedx=-1
+        self.speedy = -1
+    def update(self):
+        # objeto1=link(assets, assets)
+        # aa=objeto1
+        # Atualização da posição da nave
+        # self.rect.x += self.speedx
+
+        # Mantem dentro da tela
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+    # def distancia(self):
+        if self.rect.x-player.rect.x>WIDTH-999:
+            self.rect.x += self.speedx
+        if self.rect.y-player.rect.y>HEIGHT-699:
+            self.rect.y +=self.speedy
 # Criando um grupo de flechas
 all_sprites = pygame.sprite.Group()
 all_flechas = pygame.sprite.Group()
@@ -312,6 +343,12 @@ groups['all_flechas'] = all_flechas
 # Criando o jogador
 player = link(groups, assets)
 all_sprites.add(player)
+
+#criando slimes:
+alls_slimes=pygame.sprite.Group()
+groups={}
+groups['all_slimes']=all_slimes
+
 
 running = True
 clock = pygame.time.Clock()
