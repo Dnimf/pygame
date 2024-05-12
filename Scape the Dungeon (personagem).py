@@ -329,10 +329,16 @@ class inimigo(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
     # def distancia(self):
-        if self.rect.x-player.rect.x>WIDTH-999:
-            self.rect.x += self.speedx
-        if self.rect.y-player.rect.y>HEIGHT-699:
-            self.rect.y +=self.speedy
+        if self.rect.x-player.rect.x!=WIDTH-999:
+            if self.rect.x>player.rect.x:
+                self.rect.x += self.speedx
+            elif self.rect.x<player.rect.x:
+                self.rect.x -=self.speedx
+        if self.rect.y-player.rect.y!=HEIGHT-699:
+            if self.rect.y>player.rect.y:
+                self.rect.y +=self.speedy
+            elif self.rect.y<player.rect.y:
+                self.rect.y-=self.speedy
 # Criando um grupo de flechas
 all_sprites = pygame.sprite.Group()
 all_flechas = pygame.sprite.Group()
