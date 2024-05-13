@@ -32,7 +32,7 @@ tiro_frente = []
 for i in range(1, 5):
     file = f'Sprites/Atirando frente/atirando_frente{i}.png'
     img = pygame.image.load(file).convert_alpha()
-    img = pygame.transform.scale(img,(72,101))
+    img = pygame.transform.scale(img,(72,115))
     tiro_frente.append(img)
 assets['tiro_frente'] = tiro_frente
 
@@ -41,7 +41,7 @@ tiro_traz = []
 for i in range(1, 5):
     file = f'Sprites/Atirando traz/atirando_traz{i}.png'
     img = pygame.image.load(file).convert_alpha()
-    img = pygame.transform.scale(img,(72,101))
+    img = pygame.transform.scale(img,(72,115))
     tiro_traz.append(img)
 assets['tiro_traz'] = tiro_traz
 
@@ -176,7 +176,7 @@ class link(pygame.sprite.Sprite):
         self.shoot_ticks = 700
         self.atirando = False
         self.frame_tiro = 0
-        self.velocidade_anim_tiro = 0.2
+        self.velocidade_anim_tiro = 0.25
         self.atirou = False
 
         # Imagens e som do personagem desviando e variaveis utilizadas na função
@@ -217,7 +217,16 @@ class link(pygame.sprite.Sprite):
             if self.frame_tiro >= len(self.image_tiro):
                 self.frame_tiro = 0
                 self.atirando = False
-            self.image = self.image_tiro[int(self.frame_tiro)]
+                self.shoot()
+            if self.direction == 'left':
+                self.image = self.tiro_esquerda[int(self.frame_tiro)]
+            elif self.direction == 'right':
+                self.image = self.tiro_direita[int(self.frame_tiro)]
+            elif self.direction == 'up':
+                self.image = self.tiro_traz[int(self.frame_tiro)]
+            elif self.direction == 'down':
+                self.image = self.tiro_frente[int(self.frame_tiro)]
+
         else:
             if self.speedx == 0 and self.speedy == 0:
                 if self.direction == 'left':
@@ -289,34 +298,28 @@ class link(pygame.sprite.Sprite):
         elapsed_ticks = now - self.last_shot
 
         # Se já pode atirar novamente...
-        if elapsed_ticks > self.shoot_ticks:
-            # Marca o tick da nova imagem.
+        if elapsed_ticks > self.shoot_ticks:            # Marca o tick da nova imagem.
+
             self.last_shot = now
             # A nova flecha vai ser criada no centro horizontal do personagem
             # Linha 81 a 88: fonte - GPT
+
             if self.direction == 'left':
                 new_flecha = flecha(self.assets, self.rect.centery, self.rect.left, self.direction)
-                self.image_tiro = self.tiro_esquerda
             elif self.direction == 'right':
                 new_flecha = flecha(self.assets, self.rect.centery, self.rect.right, self.direction)
-                self.image_tiro = self.tiro_direita
             elif self.direction == 'up':
                 new_flecha = flecha(self.assets, self.rect.top, self.rect.centerx, self.direction)
-                self.image_tiro = self.tiro_traz
             elif self.direction == 'down':
                 new_flecha = flecha(self.assets, self.rect.bottom, self.rect.centerx, self.direction)
-                self.image_tiro = self.tiro_frente
-
-                self.frame_tiro += self.velocidade_anim_tiro
-                if self.frame_tiro >= len(self.tiro_frente):
-                    self.frame_tiro = 0
-            self.atirando = True
-
             self.groups['all_sprites'].add(new_flecha)
             self.groups['all_flechas'].add(new_flecha)
             self.som_tiro.play()
 
-                
+
+            self.frame_tiro += self.velocidade_anim_tiro
+            if self.frame_tiro >= len(self.tiro_frente):
+                self.frame_tiro = 0
     
     def desvio(self):
         now = pygame.time.get_ticks()
@@ -375,13 +378,14 @@ groups['all_flechas'] = all_flechas
 player = link(groups, assets)
 all_sprites.add(player)
 
+# Iniciando o loop do jogo
 running = True
 clock = pygame.time.Clock()
 FPS = 60
 
+# Loop principal
 while running:
     clock.tick(FPS)
-
     window.fill((0, 0, 0))
     window.blit(assets['background'], (0, 0))
 
@@ -389,6 +393,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        # Ações do jogador
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                 player.speedx = -3
@@ -402,10 +407,12 @@ while running:
             elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
                 player.speedy = 3
                 player.speedx = 0
-            if event.key == pygame.K_SPACE:
+            elif event.key == pygame.K_SPACE:
                 player.desvio()
+                
         if event.type == pygame.MOUSEBUTTONDOWN:
-            player.shoot()
+            if event.button == 1:
+                player.atirando = True
 
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_a or event.key == pygame.K_LEFT:
@@ -418,12 +425,12 @@ while running:
             player.speedy = 0
         if event.key == pygame.K_SPACE:
             player.desviando = False
-    if event.type == pygame.MOUSEBUTTONUP:
-        player.atirando = False
-    
+
+    # Atualizando a tela
     all_sprites.update()
     all_sprites.draw(window)
 
     pygame.display.update()
 
+# Finalizando o jogo
 pygame.quit()
