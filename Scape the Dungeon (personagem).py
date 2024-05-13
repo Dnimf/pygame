@@ -173,10 +173,10 @@ class link(pygame.sprite.Sprite):
         self.tiro_direita = assets['tiro_direita']
         self.som_tiro = assets['som_flecha']
         self.last_shot = pygame.time.get_ticks()
-        self.shoot_ticks = 700
+        self.shoot_ticks = 00
         self.atirando = False
         self.frame_tiro = 0
-        self.velocidade_anim_tiro = 0.25
+        self.velocidade_anim_tiro = 0.17
         self.atirou = False
 
         # Imagens e som do personagem desviando e variaveis utilizadas na função
@@ -409,6 +409,10 @@ while running:
                 player.speedx = 0
             elif event.key == pygame.K_SPACE:
                 player.desvio()
+            else:
+                player.speedx = 0
+                player.speedy = 0
+            
                 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -425,6 +429,10 @@ while running:
             player.speedy = 0
         if event.key == pygame.K_SPACE:
             player.desviando = False
+        else:
+            player.speedx = 0
+            player.speedy = 0
+    
 
     # Atualizando a tela
     all_sprites.update()
