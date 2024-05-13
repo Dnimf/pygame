@@ -1,6 +1,6 @@
 import pygame
 import pygame.sprite
-import random
+
 pygame.init()
 pygame.mixer.init()
 
@@ -8,52 +8,77 @@ pygame.mixer.init()
 infoObject = pygame.display.Info()
 WIDTH = infoObject.current_w
 HEIGHT = infoObject.current_h
-SLIME_WIDTH = 50
-SLIME_HEIGHT = 38
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption("Game")
 assets = {}
 
+icon = pygame.image.load('Sprites/Triforce.png')
+icon = pygame.transform.scale(icon, (32, 32))
+pygame.display.set_icon(icon)
+
 #Criando o background
-assets['background'] = pygame.image.load('background.png').convert()
+assets['background'] = pygame.image.load('Sprites/background.png').convert()
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
 
 #criando a flecha
-assets['flecha_img'] = pygame.image.load('flecha.png').convert_alpha()
+assets['flecha_img'] = pygame.image.load('Sprites/flecha.png').convert_alpha()
 assets['flecha_img'] = pygame.transform.scale(assets['flecha_img'], (55, 19))
-assets['som_flecha'] = pygame.mixer.Sound('MC_Arrow_shoot.wav')
+assets['som_flecha'] = pygame.mixer.Sound('Sound effects/MC_Arrow_shoot.wav')
 
-#Criando os srpites de tiro
-assets['tiro_frente'] = pygame.image.load('Link_atirando_frente.png').convert_alpha()
-assets['tiro_frente'] = pygame.transform.scale(assets['tiro_frente'], (72, 101))
+#Criando as animações de tiro
+# Atirando de frente
+tiro_frente = []
+for i in range(1, 5):
+    file = f'Sprites/Atirando frente/atirando_frente{i}.png'
+    img = pygame.image.load(file).convert_alpha()
+    img = pygame.transform.scale(img,(72,101))
+    tiro_frente.append(img)
+assets['tiro_frente'] = tiro_frente
 
-assets['tiro_direita'] = pygame.image.load('Link_atirando_lado.png').convert_alpha()
-assets['tiro_direita'] = pygame.transform.scale(assets['tiro_direita'], (72, 101))
+# Atirando de traz
+tiro_traz = []
+for i in range(1, 5):
+    file = f'Sprites/Atirando traz/atirando_traz{i}.png'
+    img = pygame.image.load(file).convert_alpha()
+    img = pygame.transform.scale(img,(72,101))
+    tiro_traz.append(img)
+assets['tiro_traz'] = tiro_traz
 
-assets['tiro_esquerda'] = pygame.transform.flip(assets['tiro_direita'], True, False)
+# Atirando para a direita
+tiro_direita = []
+for i in range(1, 5):
+    file = f'Sprites/Atirando lado/atirando_lado{i}.png'
+    img = pygame.image.load(file).convert_alpha()
+    img = pygame.transform.scale(img,(95,101))
+    tiro_direita.append(img)
+assets['tiro_direita'] = tiro_direita
 
-assets['tiro_traz'] = pygame.image.load('Link_atirando_traz.png').convert_alpha()
-assets['tiro_traz'] = pygame.transform.scale(assets['tiro_traz'], (72, 101))
+# Atirando para esquerda
+tiro_esquerda = []
+for i in range(1, 5):
+    file = f'Sprites/Atirando lado/atirando_lado{i}.png'
+    img = pygame.image.load(file).convert_alpha()
+    img = pygame.transform.scale(img,(95,101))
+    img = pygame.transform.flip(img, True, False)
+    tiro_esquerda.append(img)
+assets['tiro_esquerda'] = tiro_esquerda
 
-#criação do inimigo
-assets['slime'] = pygame.image.load(r'C:\Users\Daniel\OneDrive\Documentos\pygame\pixil-frame-0.png').convert_alpha()
-assets['slime_img'] = pygame.transform.scale(assets['slime'], (SLIME_WIDTH, SLIME_HEIGHT))
 
 # Criando as animações - Sprites do jogo the legend of zelda: minish cap
-# Movendo para frente
+# Movendo de frente
 anim_frente = []
 for i in range(1,12):
-    file = f'Frente/link_frente{i}.png'
+    file = f'Sprites/Frente/link_frente{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     anim_frente.append(img)
 assets['anim_frente'] = anim_frente
 
-# Movendo para traz
+# Movendo de traz
 anim_traz = []
 for i in range(1,12):
-    file = f'Traz/link_traz{i}.png'
+    file = f'Sprites/Traz/link_traz{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     anim_traz.append(img)
@@ -62,7 +87,7 @@ assets['anim_traz'] = anim_traz
 # Movendo para esquerda
 anim_esquerda = []
 for i in range(1,12):
-    file = f'Lado/link_lado{i}.png'
+    file = f'Sprites/Lado/link_lado{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     img = pygame.transform.flip(img, True, False)
@@ -72,7 +97,7 @@ assets['anim_esquerda'] = anim_esquerda
 # Movendo para direita
 anim_direita = []
 for i in range(1,12):
-    file = f'Lado/link_lado{i}.png'
+    file = f'Sprites/Lado/link_lado{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     anim_direita.append(img)
@@ -81,7 +106,7 @@ assets['anim_direita'] = anim_direita
 # Desviando para frente
 desv_frente = []
 for i in range(1,9):
-    file = f'desviando frente/desviando_frente{i}.png'
+    file = f'Sprites/desviando frente/desviando_frente{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     desv_frente.append(img)
@@ -90,7 +115,7 @@ assets['desv_frente'] = desv_frente
 # Desviando para traz
 desv_traz = []
 for i in range(1,9):
-    file = f'desviando traz/desviando_traz{i}.png'
+    file = f'Sprites/desviando traz/desviando_traz{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     desv_traz.append(img)
@@ -99,7 +124,7 @@ assets['desv_traz'] = desv_traz
 # Desviando para a direita
 desv_direita = []
 for i in range(1,9):
-    file = f'desviando lado/desviando_lado{i}.png'
+    file = f'Sprites/desviando lado/desviando_lado{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     desv_direita.append(img)
@@ -108,12 +133,20 @@ assets['desv_direita'] = desv_direita
 # Desviando para a esquerda
 desv_esquerda = []
 for i in range(1,9):
-    file = f'desviando lado/desviando_lado{i}.png'
+    file = f'Sprites/desviando lado/desviando_lado{i}.png'
     img = pygame.image.load(file).convert_alpha()
     img = pygame.transform.scale(img,(72,101))
     img = pygame.transform.flip(img, True, False)
     desv_esquerda.append(img)
 assets['desv_esquerda'] = desv_esquerda
+
+# Som do desvio
+assets['som_desv'] = pygame.mixer.Sound('Sound effects/MC_Link_Roll.wav')
+
+# Trilha sonora
+pygame.mixer.music.load('Sound effects/Soundtrack.wav')
+pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.play(loops=-1)
 
 #Criando a classe do player
 class link(pygame.sprite.Sprite):
@@ -121,20 +154,47 @@ class link(pygame.sprite.Sprite):
         # caracteristicas do player.
         pygame.sprite.Sprite.__init__(self)
 
+        # Grupos
         self.groups = groups
         self.assets = assets
+
+        # Imagens da animação de andar e variaveis utilizadas para que a animação ocorra
         self.img_frente = assets['anim_frente']
         self.img_traz = assets['anim_traz']
         self.img_esquerda = assets['anim_esquerda']
         self.img_direita = assets['anim_direita']
+        self.frame = 0
+        self.velocidade_anim = 0.3
+
+        # Imagens e som do personagem atirando com o arco e flecha e variaveis utilizadas na função
         self.tiro_frente = assets['tiro_frente']
         self.tiro_traz = assets['tiro_traz']
         self.tiro_esquerda = assets['tiro_esquerda']
         self.tiro_direita = assets['tiro_direita']
+        self.som_tiro = assets['som_flecha']
+        self.last_shot = pygame.time.get_ticks()
+        self.shoot_ticks = 700
+        self.atirando = False
+        self.frame_tiro = 0
+        self.velocidade_anim_tiro = 0.2
+        self.atirou = False
+
+        # Imagens e som do personagem desviando e variaveis utilizadas na função
         self.desvio_frente = assets['desv_frente']
         self.desvio_traz = assets['desv_traz']
         self.desvio_direita = assets['desv_direita']
         self.desvio_esquerda = assets['desv_esquerda']
+        self.som_desv = assets['som_desv']
+        self.desviando = False
+        self.tempo_desvio = 300
+        self.inicio_desvio = 0
+        self.velocidade_desvio = 6  
+        self.direcao_desvio = None
+        self.velocidade_anim_desv = 0.4
+        self.frame_desv = 0
+        self.anim_desv = None
+
+        # Caracteristicas iniciais do personagem
         self.image = self.img_frente[0]
         self.image_tiro = self.tiro_traz
         self.rect = self.image.get_rect()
@@ -142,21 +202,9 @@ class link(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 120
         self.speedx = 0
         self.speedy = 0
-        self.last_shot = pygame.time.get_ticks()
-        self.shoot_ticks = 700
+
+        # Variaveis utilizadas nas outras funções
         self.direction = 'down'
-        self.frame = 0
-        self.velocidade_anim = 0.2
-        self.atirando = False
-        self.som_tiro = assets['som_flecha']
-        self.desviando = False
-        self.tempo_desvio = 300
-        self.inicio_desvio = 0
-        self.velocidade_desvio = 4  
-        self.direcao_desvio = None
-        self.velocidade_anim_desv = 1
-        self.frame_desv = 0
-        self.anim_desv = None
 
     def update(self):
         self.rect.x += self.speedx
@@ -165,7 +213,11 @@ class link(pygame.sprite.Sprite):
         # Muda a direção do jogador baseado na direção
         # Define que se o jogador estiver parado, a sprite sera a inicial
         if self.atirando:
-            self.image = self.image_tiro
+            self.frame_tiro += self.velocidade_anim_tiro
+            if self.frame_tiro >= len(self.image_tiro):
+                self.frame_tiro = 0
+                self.atirando = False
+            self.image = self.image_tiro[int(self.frame_tiro)]
         else:
             if self.speedx == 0 and self.speedy == 0:
                 if self.direction == 'left':
@@ -205,7 +257,7 @@ class link(pygame.sprite.Sprite):
         if self.rect.bottom > HEIGHT-115:
             self.rect.bottom = HEIGHT-115
 
-        #definindo o tempo de desvio (Fonte: Chat GPT)
+        #definindo o tempo de desvio (Ajuda: Chat GPT)
         if self.desviando:
 
             now = pygame.time.get_ticks()
@@ -213,20 +265,20 @@ class link(pygame.sprite.Sprite):
                 self.desviando = False
                 self.direcao_desvio = None
             else:
-                if self.direcao_desvio == 'left':
+                if self.direction == 'left':
                     self.rect.x -= self.velocidade_desvio
                     self.image = self.desvio_esquerda[int(self.frame_desv)]
-                elif self.direcao_desvio == 'right':
+                elif self.direction == 'right':
                     self.rect.x += self.velocidade_desvio
                     self.image = self.desvio_direita[int(self.frame_desv)]
-                elif self.direcao_desvio == 'up':
+                elif self.direction == 'up':
                     self.rect.y -= self.velocidade_desvio
                     self.image = self.desvio_traz[int(self.frame_desv)]
-                elif self.direcao_desvio == 'down':
+                elif self.direction == 'down':
                     self.rect.y += self.velocidade_desvio
                     self.image = self.desvio_frente[int(self.frame_desv)]
 
-                self.frame_desv += self.velocidade_anim
+                self.frame_desv += self.velocidade_anim_desv
                 if self.frame_desv >= len(self.desvio_frente):
                     self.frame_desv = 0
 
@@ -254,11 +306,17 @@ class link(pygame.sprite.Sprite):
             elif self.direction == 'down':
                 new_flecha = flecha(self.assets, self.rect.bottom, self.rect.centerx, self.direction)
                 self.image_tiro = self.tiro_frente
-            self.image = self.image_tiro
+
+                self.frame_tiro += self.velocidade_anim_tiro
+                if self.frame_tiro >= len(self.tiro_frente):
+                    self.frame_tiro = 0
+            self.atirando = True
+
             self.groups['all_sprites'].add(new_flecha)
             self.groups['all_flechas'].add(new_flecha)
             self.som_tiro.play()
-            self.atirando = True
+
+                
     
     def desvio(self):
         now = pygame.time.get_ticks()
@@ -268,7 +326,7 @@ class link(pygame.sprite.Sprite):
             self.last_shot = now
             self.desviando = True
             self.inicio_desvio = now
-            self.direcao_desvio = self.direction
+        self.som_desv.play()
                 
 # Criando a classe das flechas
 class flecha(pygame.sprite.Sprite):
@@ -306,39 +364,6 @@ class flecha(pygame.sprite.Sprite):
         if self.rect.bottom < 85 or self.rect.top > HEIGHT-115 or self.rect.right < 150 or self.rect.left > WIDTH-150:
             self.kill()
 
-#criando classe das slimes
-#class inimigo(pygame.sprite.Sprite):
-class inimigo(pygame.sprite.Sprite):
-    def __init__(self, img):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = img
-        self.rect = self.image.get_rect()
-        self.rect.x =random.randint(0, WIDHT-SLIME-WITDH)
-        self.rect.y = random.radint(0, HEIGHT-SLIME_HEIGHT)
-        self.speedx=-1
-        self.speedy = -1
-    def update(self):
-        # objeto1=link(assets, assets)
-        # aa=objeto1
-        # Atualização da posição da nave
-        # self.rect.x += self.speedx
-
-        # Mantem dentro da tela
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-    # def distancia(self):
-        if self.rect.x-player.rect.x!=WIDTH-999:
-            if self.rect.x>player.rect.x:
-                self.rect.x += self.speedx
-            elif self.rect.x<player.rect.x:
-                self.rect.x -=self.speedx
-        if self.rect.y-player.rect.y!=HEIGHT-699:
-            if self.rect.y>player.rect.y:
-                self.rect.y +=self.speedy
-            elif self.rect.y<player.rect.y:
-                self.rect.y-=self.speedy
 # Criando um grupo de flechas
 all_sprites = pygame.sprite.Group()
 all_flechas = pygame.sprite.Group()
@@ -349,12 +374,6 @@ groups['all_flechas'] = all_flechas
 # Criando o jogador
 player = link(groups, assets)
 all_sprites.add(player)
-
-#criando slimes:
-alls_slimes=pygame.sprite.Group()
-groups={}
-groups['all_slimes']=all_slimes
-
 
 running = True
 clock = pygame.time.Clock()
@@ -401,8 +420,6 @@ while running:
             player.desviando = False
     if event.type == pygame.MOUSEBUTTONUP:
         player.atirando = False
-
-
     
     all_sprites.update()
     all_sprites.draw(window)
