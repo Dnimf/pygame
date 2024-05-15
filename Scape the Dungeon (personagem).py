@@ -22,8 +22,11 @@ assets['background'] = pygame.image.load('Sprites/background.png').convert()
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
 
 #criando a flecha
-assets['flecha_img'] = pygame.image.load('Sprites/flecha.png').convert_alpha()
-assets['flecha_img'] = pygame.transform.scale(assets['flecha_img'], (55, 19))
+assets['flecha_img_right'] = pygame.image.load('Sprites/flecha.png').convert_alpha()
+assets['flecha_img_right'] = pygame.transform.scale(assets['flecha_img_right'], (55, 19))
+assets['flecha_img_up'] = pygame.transform.rotate(assets['flecha_img_right'], 90)
+assets['flecha_img_left'] = pygame.transform.rotate(assets['flecha_img_right'], 180)
+assets['flecha_img_down'] = pygame.transform.rotate(assets['flecha_img_right'], 270)
 assets['som_flecha'] = pygame.mixer.Sound('Sound effects/MC_Arrow_shoot.wav')
 
 #Criando as animações de tiro
@@ -295,31 +298,23 @@ class link(pygame.sprite.Sprite):
         # Verifica se pode atirar
         now = pygame.time.get_ticks()
         # Verifica quantos ticks se passaram desde o último tiro.
-        elapsed_ticks = now - self.last_shot
 
-        # Se já pode atirar novamente...
-        if elapsed_ticks > self.shoot_ticks:            # Marca o tick da nova imagem.
-
-            self.last_shot = now
-            # A nova flecha vai ser criada no centro horizontal do personagem
-            # Linha 81 a 88: fonte - GPT
-
-            if self.direction == 'left':
-                new_flecha = flecha(self.assets, self.rect.centery, self.rect.left, self.direction)
-            elif self.direction == 'right':
-                new_flecha = flecha(self.assets, self.rect.centery, self.rect.right, self.direction)
-            elif self.direction == 'up':
-                new_flecha = flecha(self.assets, self.rect.top, self.rect.centerx, self.direction)
-            elif self.direction == 'down':
-                new_flecha = flecha(self.assets, self.rect.bottom, self.rect.centerx, self.direction)
-            self.groups['all_sprites'].add(new_flecha)
-            self.groups['all_flechas'].add(new_flecha)
-            self.som_tiro.play()
+        if self.direction == 'left':
+            new_flecha = flecha(self.assets, self.rect.centery, self.rect.left, self.direction)
+        elif self.direction == 'right':
+            new_flecha = flecha(self.assets, self.rect.centery, self.rect.right, self.direction)
+        elif self.direction == 'up':
+            new_flecha = flecha(self.assets, self.rect.top, self.rect.centerx, self.direction)
+        elif self.direction == 'down':
+            new_flecha = flecha(self.assets, self.rect.bottom, self.rect.centerx, self.direction)
+        self.groups['all_sprites'].add(new_flecha)
+        self.groups['all_flechas'].add(new_flecha)
+        self.som_tiro.play()
 
 
-            self.frame_tiro += self.velocidade_anim_tiro
-            if self.frame_tiro >= len(self.tiro_frente):
-                self.frame_tiro = 0
+        self.frame_tiro += self.velocidade_anim_tiro
+        if self.frame_tiro >= len(self.tiro_frente):
+            self.frame_tiro = 0
     
     def desvio(self):
         now = pygame.time.get_ticks()
@@ -335,7 +330,7 @@ class link(pygame.sprite.Sprite):
 class flecha(pygame.sprite.Sprite):
     def __init__(self, assets, py, px, direction):
         pygame.sprite.Sprite.__init__(self)
-        self.image = assets['flecha_img']
+        self.image = assets[f'flecha_img_{direction}']
         self.rect = self.image.get_rect()
         self.rect.centerx = px
         self.rect.y = py
@@ -356,13 +351,13 @@ class flecha(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
         if self.direction == 'left':
-            self.image = pygame.transform.rotate(assets['flecha_img'], 180)
+            self.image = assets['flecha_img_left']
         elif self.direction == 'right':
-            self.image = assets['flecha_img']
+            self.image = assets['flecha_img_right']
         elif self.direction == 'up':
-            self.image = pygame.transform.rotate(assets['flecha_img'], 90)
+            self.image = assets['flecha_img_up']
         elif self.direction == 'down':
-            self.image = pygame.transform.rotate(assets['flecha_img'], 270)
+            self.image = assets['flecha_img_down']
 
         if self.rect.bottom < 85 or self.rect.top > HEIGHT-115 or self.rect.right < 150 or self.rect.left > WIDTH-150:
             self.kill()
@@ -409,9 +404,6 @@ while running:
                 player.speedx = 0
             elif event.key == pygame.K_SPACE:
                 player.desvio()
-            else:
-                player.speedx = 0
-                player.speedy = 0
             
                 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -429,9 +421,6 @@ while running:
             player.speedy = 0
         if event.key == pygame.K_SPACE:
             player.desviando = False
-        else:
-            player.speedx = 0
-            player.speedy = 0
     
 
     # Atualizando a tela
