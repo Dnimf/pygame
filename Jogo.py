@@ -483,8 +483,8 @@ while running:
 
     hits = pygame.sprite.groupcollide(all_flechas, all_slime, True, False)
     for hit_inimigo in hits:
-        slime.vida -= 1
-        if slime.vida == 0:
+        vida_inimigo -= 1
+        if vida_inimigo == 0:
             pontos += 50
             slime.kill()
             j += 1
@@ -492,18 +492,18 @@ while running:
                 slime = inimigo(assets)
                 all_slime.add(slime)
                 all_sprites.add(slime)
-                
+                vida_inimigo=6
             if j == 2:
-                sl = inimigo(assets)
+                slime = inimigo(assets)
                 all_slime.add(slime)
                 all_sprites.add(slime)
-
+                vida_inimigo=9
             if j == 3:
-                for _ in range(2):
-                    sl = inimigo(assets)
+                for i in range(2):
+                    slime = inimigo(assets)
                     all_slime.add(slime)
                     all_sprites.add(slime)
-
+                    vida_inimigo=6
     hits_player = pygame.sprite.spritecollide(player, all_slime, False)
     now = pygame.time.get_ticks()
 
@@ -529,6 +529,10 @@ while running:
     text_rect.midtop = (WIDTH / 4, 10)
     window.blit(text_surface, text_rect)
 
+    text_surface = assets['fonte'].render(f"{vida_inimigo:08d}", True, (255, 255, 255))
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (WIDTH / 4, 40)
+    window.blit(text_surface, text_rect)    
     pygame.display.update()
 
 # Finalizando o jogo
