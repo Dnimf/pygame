@@ -9,8 +9,8 @@ pygame.mixer.init()
 infoObject = pygame.display.Info()
 WIDTH = infoObject.current_w
 HEIGHT = infoObject.current_h
-SLIME_WIDTH = 50
-SLIME_HEIGHT = 38
+SLIME_WIDTH = 80
+SLIME_HEIGHT = 68
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -384,8 +384,9 @@ class inimigo(pygame.sprite.Sprite):
         self.rect.y = random.randint(0, HEIGHT-SLIME_HEIGHT)
         self.speedx=-1
         self.speedy = -1
-    def update(self):
+        self.vida = 3
 
+    def update(self):
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
@@ -433,6 +434,7 @@ vida_inimigo = 3
 j = 0
 vida_player = 3
 pontos = 0
+
 # Define a última vez que o jogador tomou um hit
 last_hit_time = pygame.time.get_ticks()
 hit_cooldown = 1000  # 1 segundo de cooldown entre hits
@@ -462,7 +464,7 @@ while running:
                 player.speedx = 0
             elif event.key == pygame.K_SPACE:
                 player.desvio()
-            
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 player.atirando = True
@@ -480,30 +482,28 @@ while running:
                 player.desviando = False
 
     hits = pygame.sprite.groupcollide(all_flechas, all_slime, True, False)
-    for slime in hits:
-        vida_inimigo -= 1
-        if vida_inimigo == 0:
+    for hit_inimigo in hits:
+        slime.vida -= 1
+        if slime.vida == 0:
             pontos += 50
-            for i in hits[slime]:
-                i.kill()
-                j += 1
-                if j == 1:
+            slime.kill()
+            j += 1
+            if j == 1:
+                slime = inimigo(assets)
+                all_slime.add(slime)
+                all_sprites.add(slime)
+                
+            if j == 2:
+                sl = inimigo(assets)
+                all_slime.add(slime)
+                all_sprites.add(slime)
+
+            if j == 3:
+                for _ in range(2):
                     sl = inimigo(assets)
-                    all_slime.add(sl)
-                    all_sprites.add(sl)
-                    vida = 6
-                if j == 2:
-                    sl = inimigo(assets)
-                    all_slime.add(sl)
-                    all_sprites.add(sl)
-                    vida = 9
-                if j == 3:
-                    for inimigos in range(2):
-                        sl = inimigo(assets)
-                        all_slime.add(sl)
-                        all_sprites.add(sl)
-                        vida = 6
-    
+                    all_slime.add(slime)
+                    all_sprites.add(slime)
+
     hits_player = pygame.sprite.spritecollide(player, all_slime, False)
     now = pygame.time.get_ticks()
 
@@ -527,11 +527,6 @@ while running:
     text_surface = assets['fonte'].render(f"{vida_player:08d}", True, (255, 255, 255))
     text_rect = text_surface.get_rect()
     text_rect.midtop = (WIDTH / 4, 10)
-    window.blit(text_surface, text_rect)
-
-    text_surface = assets['fonte'].render(f"{vida_inimigo:08d}", True, (255, 255, 255))
-    text_rect = text_surface.get_rect()
-    text_rect.midtop = (WIDTH / 4, 50)
     window.blit(text_surface, text_rect)
 
     pygame.display.update()
