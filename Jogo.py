@@ -431,6 +431,7 @@ FPS = 60
 # Parametros do jogo
 numero_slimes = 1
 vida_inimigo = 3
+vida_inimigo1=12
 j = 0
 vida_player = 3
 pontos = 0
@@ -484,6 +485,7 @@ while running:
     hits = pygame.sprite.groupcollide(all_flechas, all_slime, True, False)
     for hit_inimigo in hits:
         vida_inimigo -= 1
+        vida_inimigo1-=1
         if vida_inimigo == 0:
             pontos += 50
             slime.kill()
@@ -499,13 +501,16 @@ while running:
                 all_sprites.add(slime)
                 vida_inimigo=9
             if j == 3:
-                for i in range(2):
-                    slime = inimigo(assets)
-                    all_slime.add(slime)
-                    all_sprites.add(slime)
-                    vida_inimigo=6
-                if vida_inimigo<=0:
-                    i.kill()
+                slime = inimigo(assets)
+                all_slime.add(slime)
+                all_sprites.add(slime)
+                slime1=inimigo(assets)
+                all_slime.add(slime1)
+                all_sprites.add(slime1)
+                vida_inimigo=6
+                vida_inimigo1=12
+            if vida_inimigo==0:
+                slime1.kill()
     hits_player = pygame.sprite.spritecollide(player, all_slime, False)
     now = pygame.time.get_ticks()
 
