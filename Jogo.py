@@ -504,6 +504,8 @@ while running:
                     all_slime.add(slime)
                     all_sprites.add(slime)
                     vida_inimigo=6
+                if vida_inimigo<=0:
+                    i.kill()
     hits_player = pygame.sprite.spritecollide(player, all_slime, False)
     now = pygame.time.get_ticks()
 
