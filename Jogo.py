@@ -148,7 +148,7 @@ for i in range(1,9):
 assets['desv_esquerda'] = desv_esquerda
 
 # Sprite do inimigo
-assets['inimigo'] = pygame.image.load('Sprites/inimigo.png').convert_alpha()
+assets['inimigo'] = pygame.image.load('pixil-frame-0.png').convert_alpha()
 assets['inimigo'] = pygame.transform.scale(assets['inimigo'], (SLIME_WIDTH, SLIME_HEIGHT))
 
 # Fonte
