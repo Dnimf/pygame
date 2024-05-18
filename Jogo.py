@@ -546,11 +546,19 @@ while state != DONE:
                 all_sprites.add(slime)
                 vida_inimigo = 9
             if j == 3:
-                for i in range(2):
-                    slime = inimigo(assets)
-                    all_slime.add(slime)
-                    all_sprites.add(slime)
-                    vida_inimigo = 6
+                slime = inimigo(assets)
+                all_slime.add(slime)
+                all_sprites.add(slime)
+                slime1=inimigo(assets)
+                all_slime.add(slime1)
+                all_sprites.add(slime1)
+                vida_inimigo = 6
+            # if vida_inimigo==0:
+            #     slime1.kill()
+            if j==4:
+                vida_inimigo=6
+        if vida_inimigo==0:
+            slime1.kill()
 
     hits_player = pygame.sprite.spritecollide(player, all_slime, False, pygame.sprite.collide_mask)
     now = pygame.time.get_ticks()
