@@ -148,7 +148,7 @@ for i in range(1,9):
 assets['desv_esquerda'] = desv_esquerda
 
 # Sprite do inimigo
-assets['inimigo'] = pygame.image.load('pixil-frame-0.png').convert_alpha()
+assets['inimigo'] = pygame.image.load('Sprites/inimigo.png').convert_alpha()
 assets['inimigo'] = pygame.transform.scale(assets['inimigo'], (SLIME_WIDTH, SLIME_HEIGHT))
 
 # Fonte
@@ -375,34 +375,78 @@ class flecha(pygame.sprite.Sprite):
             self.kill()
 
 class inimigo(pygame.sprite.Sprite):
-
     def __init__(self, assets):
         pygame.sprite.Sprite.__init__(self)
         self.image = assets['inimigo']
         self.rect = self.image.get_rect()
-        self.rect.x =random.randint(0, WIDTH-SLIME_WIDTH)
+        self.rect.x = random.randint(0, WIDTH-SLIME_WIDTH)
         self.rect.y = random.randint(0, HEIGHT-SLIME_HEIGHT)
-        self.speedx=-1
+        self.speedx = -1
         self.speedy = -1
         self.vida = 3
+        self.recuando = False
+        self.tempo_recuo = 250
+        self.inicio_recuo = 0
+        self.velocidade_recuo = 6
+        self.direction = 'down'
+        self.rec_ticks = 500
 
     def update(self):
-        # Mantem dentro da tela
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-    # def distancia(self):
-        if self.rect.x-player.rect.x!=WIDTH-999:
-            if self.rect.x>player.rect.x:
-                self.rect.x += self.speedx
-            elif self.rect.x<player.rect.x:
-                self.rect.x -=self.speedx
-        if self.rect.y-player.rect.y!=HEIGHT-699:
-            if self.rect.y>player.rect.y:
-                self.rect.y +=self.speedy
-            elif self.rect.y<player.rect.y:
-                self.rect.y-=self.speedy
+        # Define direção do inimigo
+        if not self.recuando:
+            if self.speedx < 0:
+                self.direction = 'left'
+            elif self.speedx > 0:
+                self.direction = 'right'
+            elif self.speedy < 0:
+                self.direction = 'up'
+            elif self.speedy > 0:
+                self.direction = 'down'
+
+            # Mantem dentro da tela
+            if self.rect.right > WIDTH:
+                self.rect.right = WIDTH
+            if self.rect.left < 0:
+                self.rect.left = 0
+
+            # Faz o inimigo seguir o player
+            if self.rect.x - player.rect.x != WIDTH-999:
+                if self.rect.x > player.rect.x:
+                    self.rect.x += self.speedx
+                elif self.rect.x < player.rect.x:
+                    self.rect.x -= self.speedx
+            if self.rect.y - player.rect.y != HEIGHT-699:
+                if self.rect.y > player.rect.y:
+                    self.rect.y += self.speedy
+                elif self.rect.y < player.rect.y:
+                    self.rect.y -= self.speedy
+
+        # Faz inimigo recuar quando acerta o player
+        if self.recuando:
+            now = pygame.time.get_ticks()
+            if now - self.inicio_recuo > self.tempo_recuo:
+                self.recuando = False
+            else:
+                if self.direction == 'left':
+                    self.rect.x -= self.velocidade_recuo
+                elif self.direction == 'right':
+                    self.rect.x += self.velocidade_recuo
+                elif self.direction == 'up':
+                    self.rect.y -= self.velocidade_recuo
+                elif self.direction == 'down':
+                    self.rect.y += self.velocidade_recuo
+
+    def recuar(self, player):
+        self.recuando = True
+        self.inicio_recuo = pygame.time.get_ticks()
+        if self.rect.x > player.rect.x:
+            self.direction = 'right'
+        elif self.rect.x < player.rect.x:
+            self.direction = 'left'
+        if self.rect.y > player.rect.y:
+            self.direction = 'down'
+        elif self.rect.y < player.rect.y:
+            self.direction = 'up'
 
 
 # Criando um grupo de sprites
@@ -423,31 +467,32 @@ all_slime.add(slime)
 player = link(groups, assets)
 all_sprites.add(player)
 
-# Iniciando o loop do jogo
-running = True
-clock = pygame.time.Clock()
-FPS = 60
-
 # Parametros do jogo
 numero_slimes = 1
 vida_inimigo = 3
-vida_inimigo1=12
 j = 0
 vida_player = 3
 pontos = 0
+
+# Iniciando o loop do jogo
+DONE = 0
+PLAYING = 1
+state = PLAYING
+clock = pygame.time.Clock()
+FPS = 60
 
 # Define a última vez que o jogador tomou um hit
 last_hit_time = pygame.time.get_ticks()
 hit_cooldown = 1000  # 1 segundo de cooldown entre hits
 
-while running:
+while state != DONE:
     clock.tick(FPS)
     window.fill((0, 0, 0))
     window.blit(assets['background'], (0, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            state = DONE
 
         # Ações do jogador
         if event.type == pygame.KEYDOWN:
@@ -482,10 +527,10 @@ while running:
             if event.key == pygame.K_SPACE:
                 player.desviando = False
 
-    hits = pygame.sprite.groupcollide(all_flechas, all_slime, True, False)
+    hits = pygame.sprite.groupcollide(all_flechas, all_slime, True, False,pygame.sprite.collide_mask)
+
     for hit_inimigo in hits:
         vida_inimigo -= 1
-        vida_inimigo1-=1
         if vida_inimigo == 0:
             pontos += 50
             slime.kill()
@@ -494,33 +539,30 @@ while running:
                 slime = inimigo(assets)
                 all_slime.add(slime)
                 all_sprites.add(slime)
-                vida_inimigo=6
+                vida_inimigo = 6
             if j == 2:
                 slime = inimigo(assets)
                 all_slime.add(slime)
                 all_sprites.add(slime)
-                vida_inimigo=9
+                vida_inimigo = 9
             if j == 3:
-                slime = inimigo(assets)
-                all_slime.add(slime)
-                all_sprites.add(slime)
-                slime1=inimigo(assets)
-                all_slime.add(slime1)
-                all_sprites.add(slime1)
-                vida_inimigo=6
-                vida_inimigo1=12
-            if vida_inimigo==0:
-                slime1.kill()
-    hits_player = pygame.sprite.spritecollide(player, all_slime, False)
+                for i in range(2):
+                    slime = inimigo(assets)
+                    all_slime.add(slime)
+                    all_sprites.add(slime)
+                    vida_inimigo = 6
+
+    hits_player = pygame.sprite.spritecollide(player, all_slime, False, pygame.sprite.collide_mask)
     now = pygame.time.get_ticks()
 
     if hits_player and now - last_hit_time > hit_cooldown:
         vida_player -= 1
         last_hit_time = now
-
+        for slime in hits_player:
+            slime.recuar(player)
         if vida_player == 0:
             player.kill()
-            running = False
+            state = DONE
 
     # Atualizando a tela
     all_sprites.update()
