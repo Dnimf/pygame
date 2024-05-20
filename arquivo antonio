@@ -96,7 +96,7 @@ def credits():
                 pygame.quit()
                 sys.exit()
 
-        screen.blit(background, (0, 0))
+        screen.blit(background2, (0, 0))
         draw_text('Créditos:', font, COLOR10, screen, screen_width // 2, screen_height // 9)
         draw_text('Daniel', small_font, COLOR10, screen, screen_width // 2, screen_height // 4)
         draw_text('Lorenzo', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 50)
@@ -104,6 +104,22 @@ def credits():
         draw_text('Prof. Carlos (pelo apoio)', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 150)
         draw_text('Ninjas = Lídia e Laís', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 200)
         draw_text('NINTENDO (pela nossa infância)', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 250)
+        button_3 = pygame.Rect(screen_width // 3, screen_height / 8, 200, 50)
+        click = False
+        button_3 = pygame.Rect(screen_width // 3, screen_height / 8, 200, 50)
+        pygame.draw.rect(screen, COLOR6, button_3)
+        mx, my = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+        if button_3.collidepoint((screen_width // 3, screen_height / 8)):
+            if click:
+                main_menu()
+
         pygame.display.update()
 
 if __name__ == '__main__':
