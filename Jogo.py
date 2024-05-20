@@ -17,9 +17,9 @@ def game_screen(window):
     pygame.display.set_caption("Game")
     assets = {}
 
-    icon = pygame.image.load('Sprites/Triforce.png')
-    icon = pygame.transform.scale(icon, (32, 32))
-    pygame.display.set_icon(icon)
+    # icon = pygame.image.load('Sprites/Triforce.png')
+    # icon = pygame.transform.scale(icon, (32, 32))
+    # pygame.display.set_icon(icon)
 
     #Criando o background
     assets['background'] = pygame.image.load('Sprites/background.png').convert()
