@@ -1,7 +1,6 @@
 import pygame
 import pygame.sprite
 import random
-
 pygame.init()
 pygame.mixer.init()
 
@@ -22,22 +21,22 @@ def game_screen(window):
     # pygame.display.set_icon(icon)
 
     #Criando o background
-    assets['background'] = pygame.image.load('Sprites/background.png').convert()
+    assets['background'] = pygame.image.load('pygame/Sprites/background.png').convert()
     assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
 
     #criando a flecha
-    assets['flecha_img_right'] = pygame.image.load('Sprites/flecha.png').convert_alpha()
+    assets['flecha_img_right'] = pygame.image.load('pygame/Sprites/flecha.png').convert_alpha()
     assets['flecha_img_right'] = pygame.transform.scale(assets['flecha_img_right'], (55, 19))
     assets['flecha_img_up'] = pygame.transform.rotate(assets['flecha_img_right'], 90)
     assets['flecha_img_left'] = pygame.transform.rotate(assets['flecha_img_right'], 180)
     assets['flecha_img_down'] = pygame.transform.rotate(assets['flecha_img_right'], 270)
-    assets['som_flecha'] = pygame.mixer.Sound('Sound effects/MC_Arrow_shoot.wav')
+    assets['som_flecha'] = pygame.mixer.Sound('pygame/Sound effects/MC_Arrow_shoot.wav')
 
     #Criando as animações de tiro
     # Atirando de frente
     tiro_frente = []
     for i in range(1, 5):
-        file = f'Sprites/Atirando frente/atirando_frente{i}.png'
+        file = f'pygame/Sprites/Atirando frente/atirando_frente{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,115))
         tiro_frente.append(img)
@@ -46,7 +45,7 @@ def game_screen(window):
     # Atirando de traz
     tiro_traz = []
     for i in range(1, 5):
-        file = f'Sprites/Atirando traz/atirando_traz{i}.png'
+        file = f'pygame/Sprites/Atirando traz/atirando_traz{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,115))
         tiro_traz.append(img)
@@ -55,7 +54,7 @@ def game_screen(window):
     # Atirando para a direita
     tiro_direita = []
     for i in range(1, 5):
-        file = f'Sprites/Atirando lado/atirando_lado{i}.png'
+        file = f'pygame/Sprites/Atirando lado/atirando_lado{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(105,101))
         tiro_direita.append(img)
@@ -64,7 +63,7 @@ def game_screen(window):
     # Atirando para esquerda
     tiro_esquerda = []
     for i in range(1, 5):
-        file = f'Sprites/Atirando lado/atirando_lado{i}.png'
+        file = f'pygame/Sprites/Atirando lado/atirando_lado{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(105,101))
         img = pygame.transform.flip(img, True, False)
@@ -76,7 +75,7 @@ def game_screen(window):
     # Movendo de frente
     anim_frente = []
     for i in range(1,12):
-        file = f'Sprites/Frente/link_frente{i}.png'
+        file = f'pygame/Sprites/Frente/link_frente{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         anim_frente.append(img)
@@ -85,7 +84,7 @@ def game_screen(window):
     # Movendo de traz
     anim_traz = []
     for i in range(1,12):
-        file = f'Sprites/Traz/link_traz{i}.png'
+        file = f'pygame/Sprites/Traz/link_traz{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         anim_traz.append(img)
@@ -94,7 +93,7 @@ def game_screen(window):
     # Movendo para esquerda
     anim_esquerda = []
     for i in range(1,12):
-        file = f'Sprites/Lado/link_lado{i}.png'
+        file = f'pygame/Sprites/Lado/link_lado{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         img = pygame.transform.flip(img, True, False)
@@ -104,7 +103,7 @@ def game_screen(window):
     # Movendo para direita
     anim_direita = []
     for i in range(1,12):
-        file = f'Sprites/Lado/link_lado{i}.png'
+        file = f'pygame/Sprites/Lado/link_lado{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         anim_direita.append(img)
@@ -113,7 +112,7 @@ def game_screen(window):
     # Desviando para frente
     desv_frente = []
     for i in range(1,9):
-        file = f'Sprites/desviando frente/desviando_frente{i}.png'
+        file = f'pygame/Sprites/desviando frente/desviando_frente{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         desv_frente.append(img)
@@ -122,7 +121,7 @@ def game_screen(window):
     # Desviando para traz
     desv_traz = []
     for i in range(1,9):
-        file = f'Sprites/desviando traz/desviando_traz{i}.png'
+        file = f'pygame/Sprites/desviando traz/desviando_traz{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         desv_traz.append(img)
@@ -131,7 +130,7 @@ def game_screen(window):
     # Desviando para a direita
     desv_direita = []
     for i in range(1,9):
-        file = f'Sprites/desviando lado/desviando_lado{i}.png'
+        file = f'pygame/Sprites/desviando lado/desviando_lado{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         desv_direita.append(img)
@@ -140,7 +139,7 @@ def game_screen(window):
     # Desviando para a esquerda
     desv_esquerda = []
     for i in range(1,9):
-        file = f'Sprites/desviando lado/desviando_lado{i}.png'
+        file = f'pygame/Sprites/desviando lado/desviando_lado{i}.png'
         img = pygame.image.load(file).convert_alpha()
         img = pygame.transform.scale(img,(72,101))
         img = pygame.transform.flip(img, True, False)
@@ -148,17 +147,17 @@ def game_screen(window):
     assets['desv_esquerda'] = desv_esquerda
 
     # Sprite do inimigo
-    assets['inimigo'] = pygame.image.load('Sprites/inimigo.png').convert_alpha()
+    assets['inimigo'] = pygame.image.load('pygame/Sprites/inimigo.png').convert_alpha()
     assets['inimigo'] = pygame.transform.scale(assets['inimigo'], (SLIME_WIDTH, SLIME_HEIGHT))
 
     # Fonte
     assets['fonte'] = pygame.font.Font(None, 48)
 
     # Som do desvio
-    assets['som_desv'] = pygame.mixer.Sound('Sound effects/MC_Link_Roll.wav')
+    assets['som_desv'] = pygame.mixer.Sound('pygame/Sound effects/MC_Link_Roll.wav')
 
     # Trilha sonora
-    pygame.mixer.music.load('Sound effects/Soundtrack.wav')
+    pygame.mixer.music.load('pygame/Sound effects/Soundtrack.wav')
     pygame.mixer.music.set_volume(0.2)
     pygame.mixer.music.play(loops=-1)
 
@@ -379,8 +378,8 @@ def game_screen(window):
             pygame.sprite.Sprite.__init__(self)
             self.image = assets['inimigo']
             self.rect = self.image.get_rect()
-            self.rect.x = random.randint(0, WIDTH-SLIME_WIDTH)
-            self.rect.y = random.randint(0, HEIGHT-SLIME_HEIGHT)
+            self.rect.x = random.randint(0, (WIDTH-150)-SLIME_WIDTH)
+            self.rect.y = random.randint(0, (HEIGHT-115)-SLIME_HEIGHT)
             self.speedx = -1
             self.speedy = -1
             self.vida = 3
