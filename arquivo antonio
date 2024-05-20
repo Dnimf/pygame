@@ -1,11 +1,19 @@
 import pygame
 import sys
+from Jogo import game_screen
 
+infoObject = pygame.display.Info()
+WIDTH = infoObject.current_w
+HEIGHT = infoObject.current_h
+SLIME_WIDTH = 80
+SLIME_HEIGHT = 68
+
+window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.init()
 
 # configurações da tela
-screen_width = 800
-screen_height = 600
+screen_width =infoObject.current_w
+screen_height =infoObject.current_h
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Menu Inicial')
 
@@ -76,6 +84,7 @@ def main_menu():
 # funções do jogo
 def game():
     running = True
+    game_screen(screen)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
