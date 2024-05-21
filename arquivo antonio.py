@@ -86,10 +86,11 @@ def game():
     running = True
 
     while running:
+        k=0
         # screen.fill(COLOR1)
         # draw_text('Jogo em Andamento...', font, COLOR4, screen, screen_width // 2, screen_height // 2)
         for event in pygame.event.get():
-            screen.fill(COLOR1)
+            # screen.fill(COLOR1)
             # draw_text('Jogo em Andamento...', font, COLOR4, screen, screen_width // 2, screen_height // 2)
             game_screen(screen)
             # if pygame.quit():
@@ -97,10 +98,12 @@ def game():
             # if event.type == pygame.QUIT:
             #     pygame.quit()
             #     sys.exit()
-        screen.fill(COLOR8)
-        draw_text('GAME OVER', font, COLOR4, screen, screen_width//2, screen_height//2)
-        draw_text('toque em qualquer lugar para continuar', font,COLOR4, screen, screen_width//2, screen_height//2+100)
-
+            k+=1
+        if k>0:
+            screen.fill(COLOR8)
+            draw_text('GAME OVER', font, COLOR4, screen, screen_width//2, screen_height//2)
+            draw_text('toque em qualquer lugar para continuar', font,COLOR4, screen, screen_width//2, screen_height//2+100)
+        
     # if running!= True:
     #     main_menu()
         pygame.display.update()
