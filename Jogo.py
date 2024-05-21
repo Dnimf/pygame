@@ -592,4 +592,4 @@ def game_screen(window):
         pygame.display.update()
 
     # Finalizando o jogo
-    pygame.quit()
+
