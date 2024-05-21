@@ -84,19 +84,27 @@ def main_menu():
 # funções do jogo
 def game():
     running = True
-    game_screen(screen)
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
 
-        screen.fill(COLOR1)
-        draw_text('Jogo em Andamento...', font, COLOR4, screen, screen_width // 2, screen_height // 2)
+    while running:
+        # screen.fill(COLOR1)
+        # draw_text('Jogo em Andamento...', font, COLOR4, screen, screen_width // 2, screen_height // 2)
+        for event in pygame.event.get():
+            screen.fill(COLOR1)
+            # draw_text('Jogo em Andamento...', font, COLOR4, screen, screen_width // 2, screen_height // 2)
+            game_screen(screen)
+            # if pygame.quit():
+
+            # if event.type == pygame.QUIT:
+            #     pygame.quit()
+            #     sys.exit()
+        screen.fill(COLOR8)
+        draw_text('GAME OVER', font, COLOR4, screen, screen_width//2, screen_height//2)
+        draw_text('toque em qualquer lugar para continuar', font,COLOR4, screen, screen_width//2, screen_height//2+100)
+
     # if running!= True:
     #     main_menu()
         pygame.display.update()
-
+    main_menu()
 # créditos
 def credits():
     running = True
@@ -107,13 +115,13 @@ def credits():
                 sys.exit()
 
         screen.blit(background2, (0, 0))
-        draw_text('Créditos:', font, COLOR10, screen, screen_width // 2, screen_height // 9)
-        draw_text('Daniel', small_font, COLOR10, screen, screen_width // 2, screen_height // 4)
-        draw_text('Lorenzo', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 50)
-        draw_text('Antonio Victor', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 100)
-        draw_text('Prof. Carlos (pelo apoio)', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 150)
-        draw_text('Ninjas = Lídia e Laís', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 200)
-        draw_text('NINTENDO (pela nossa infância)', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 250)
+        draw_text('Créditos:', font, COLOR9, screen, screen_width // 2, screen_height // 9)
+        draw_text('Daniel', small_font, COLOR9, screen, screen_width // 2, screen_height // 4)
+        draw_text('Lorenzo', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 50)
+        draw_text('Antonio Victor', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 100)
+        draw_text('Prof. Carlos (pelo apoio)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 150)
+        draw_text('Ninjas = Lídia e Laís', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 200)
+        draw_text('NINTENDO (pela nossa infância)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 250)
         vertices = [690, 575, 150, 40]
         pygame.draw.rect(screen, COLOR6, vertices)
         draw_text('voltar', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 350)
@@ -132,7 +140,7 @@ def credits():
         if button_3.collidepoint((screen_width // 2, screen_height // 4+300)):
             if click:
                 main_menu()
-
+        
 
         pygame.display.update()
 
