@@ -50,7 +50,7 @@ def main_menu():
     click = False
     while True:
         screen.blit(background, (0, 0))
-        draw_text('Menu Inicial', font, COLOR9, screen, screen_width // 2, screen_height // 4)
+        draw_text('Zelda da shopee', font, COLOR9, screen, screen_width // 2, screen_height // 4)
 
         mx, my = pygame.mouse.get_pos()
 
