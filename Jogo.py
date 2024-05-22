@@ -544,7 +544,7 @@ def game_screen(window):
                     all_slime.add(slime)
                     all_sprites.add(slime)
                     vida_inimigo = 9
-                if j == 3:
+                if j >= 3:
                     slime = inimigo(assets)
                     all_slime.add(slime)
                     all_sprites.add(slime)
