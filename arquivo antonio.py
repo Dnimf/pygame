@@ -95,15 +95,16 @@ def game():
             game_screen(screen)
             # if pygame.quit():
 
-            # if event.type == pygame.QUIT:
-            #     pygame.quit()
-            #     sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key==pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
             k+=1
         if k>0:
             screen.fill(COLOR8)
             draw_text('GAME OVER', font, COLOR4, screen, screen_width//2, screen_height//2)
             draw_text('toque em qualquer lugar para continuar', font,COLOR4, screen, screen_width//2, screen_height//2+100)
-        
+
     # if running!= True:
     #     main_menu()
         pygame.display.update()
@@ -125,7 +126,6 @@ def credits():
         draw_text('Prof. Carlos (pelo apoio)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 150)
         draw_text('Ninjas = Lídia e Laís', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 200)
         draw_text('NINTENDO (pela nossa infância)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 250)
-        draw_text('Victor Melchert (pela trilha sonora)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 300)
         vertices = [690, 575, 150, 40]
         pygame.draw.rect(screen, COLOR6, vertices)
         draw_text('voltar', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 350)
