@@ -22,8 +22,8 @@ https://code.visualstudio.com/
 
 - Após abrir, instale a biblioteca pygame inserindo o seguinte comando no terminal do seu VSCode: %pip install pygame
 
+- Por fim, rode o codigo do arquivo "Arquivo antonio.py"
+
 #Vídeo de demonstração: 
 
 https://www.youtube.com/watch?v=aNfjH-0MDIM
-
-- Por fim, rode o codigo do arquivo "Arquivo antonio.py"
