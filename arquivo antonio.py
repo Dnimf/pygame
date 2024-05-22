@@ -55,7 +55,7 @@ def main_menu():
         mx, my = pygame.mouse.get_pos()
 
         button_1 = pygame.Rect(screen_width // 2.3, screen_height // 2, 200, 50)
-        button_2 = pygame.Rect(screen_width // 2.3, screen_height // 2 + 100, 200, 50)
+        button_2 = pygame.Rect(screen_width // 2.3, screen_height // 2+100,200,50)
 
         if button_1.collidepoint((mx, my)):
             if click:
