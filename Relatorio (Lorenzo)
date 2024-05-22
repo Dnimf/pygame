@@ -1,9 +1,0 @@
-O que foi feito essa semana:
-	Essa semana eu fiz a jogabilidade do personagem e as mecânicas do jogo, como andar, atirar e desviar, além de adicionar um background (possivelmente provisório),
-uma trilha sonora, efeitos sonoros e animações para cada ação, adicionando sprites do jogo Zelda.
-
-O que fazer para a próxima semana:
-	Arrumar a geração da flecha, que deve ser gerada após a animação, e, junto da partes dos outros integrantes, juntar os componentes e terminar o jogo, adicionando 
-vida ao player, aos inimigos, uma tela de inicio e de game over, etc.
-
-(Não sabia onde entregar domingo)
