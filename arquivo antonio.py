@@ -127,12 +127,12 @@ def credits():
         draw_text('Ninjas = Lídia e Laís', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 200)
         draw_text('NINTENDO (pela nossa infância)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 250)
         draw_text('Victor Melchert (Autor da trilha sonora)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 300)
-        vertices = [690, 575, 150, 40]
+        vertices = [720, 595, 150, 40]
         pygame.draw.rect(screen, COLOR6, vertices)
         draw_text('voltar', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 350)
         #button_3 = pygame.Rect(screen_width // 3, screen_height / 8, 200, 50)
         click = False
-        button_3 = pygame.Rect(screen_width // 2, screen_height // 4+300, 300, 50)
+        button_3 = pygame.Rect(screen_width // 2, screen_height // 4+350, 350, 50)
 
         mx, my = pygame.mouse.get_pos()
         for event in pygame.event.get():
@@ -142,7 +142,7 @@ def credits():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
-        if button_3.collidepoint((screen_width // 2, screen_height // 4+300)):
+        if button_3.collidepoint((screen_width // 2, screen_height // 4+350)):
             if click:
                 main_menu()
         
