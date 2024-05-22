@@ -125,6 +125,7 @@ def credits():
         draw_text('Prof. Carlos (pelo apoio)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 150)
         draw_text('Ninjas = Lídia e Laís', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 200)
         draw_text('NINTENDO (pela nossa infância)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 250)
+        draw_text('Victor Melchert (pela trilha sonora)', small_font, COLOR9, screen, screen_width // 2, screen_height // 4 + 300)
         vertices = [690, 575, 150, 40]
         pygame.draw.rect(screen, COLOR6, vertices)
         draw_text('voltar', small_font, COLOR10, screen, screen_width // 2, screen_height // 4 + 350)
