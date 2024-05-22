@@ -1,1 +1,0 @@
-print("Deus me ajuda!")
