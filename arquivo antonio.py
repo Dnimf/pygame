@@ -34,9 +34,9 @@ font = pygame.font.Font(None, 74)
 small_font = pygame.font.Font(None, 50)
 
 #  imagem de fundo
-background = pygame.image.load(r'C:\Users\Daniel\Downloads\6c902ef0c191ccbb5cc3c8af97826912.png')
+background = pygame.image.load('sprites/background inicio.png')
 background = pygame.transform.scale(background, (screen_width, screen_height))
-background2 = pygame.image.load(r'C:\Users\Daniel\Downloads\Imagem do WhatsApp de 2024-05-15 à(s) 18.35.50_2f425360.jpg')
+background2 = pygame.image.load('sprites/background creditos.jpg')
 background2 = pygame.transform.scale(background2, (screen_width, screen_height))
 # funções para exibir o texto
 def draw_text(text, font, color, surface, x, y):
